@@ -7,29 +7,56 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UsersApi.Application.Users.Commands.CreateUser;
+using UsersApi.Application.Users.Interfaces;
+using UsersApi.Application.Users.Models;
+using UsersApi.Models;
 
 namespace UsersApi.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api")]
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
-        private readonly IMediator _mediator;
-        public UsersController(ILogger<UsersController> logger, IMediator mediator)
+        private readonly IUserService _userService;
+
+        public UsersController(ILogger<UsersController> logger, IUserService userService)
         {
             _logger = logger;
-            _mediator = mediator;
+            _userService = userService;
         }
 
         [HttpPost]
         [Route("user")]
-        [ProducesResponseType(typeof(object), (int)HttpStatusCode.NoContent)]
-        [ProducesResponseType(typeof(object), (int)HttpStatusCode.Conflict)]
-        [ProducesResponseType(typeof(object), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> CreateUser([FromBody]CreateUserCommand request)
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> CreateUser([FromBody]CreateUserRequest request)
         {
-            return Ok(await _mediator.Send(request));
+            await _userService.CreateUser(request);
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("user")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteUser(string userName)
+        {
+            await _userService.DeleteUser(userName);
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("user/login")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> SignInUser(SignInUserRequest request)
+        {
+            await _userService.SignIn(request);
+            return NoContent();
         }
 
     }

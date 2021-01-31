@@ -15,6 +15,7 @@ namespace UsersApi.Application.Users.Commands.CreateUser
             var user = new User(request.UserName,
                                 request.Email,
                                 request.PersonalId,
+                                "",
                                 new Address(request.Street,
                                             request.City,
                                             request.Country),

@@ -11,8 +11,8 @@ namespace UsersApi.Domain.Entities.UserAggregate
     {
 
         public string PersonalId { get; private set; }
-        public bool Married { get; private set; }
-        public bool HasJob { get; private set; }
+        public bool? Married { get; private set; }
+        public bool? HasJob { get; private set; }
         public decimal? MonthlySalary { get; private set; }
         public int? AddressId { get; private set; }
         public virtual Address Address { get; private set; }
@@ -22,11 +22,11 @@ namespace UsersApi.Domain.Entities.UserAggregate
 
         }
 
-        public User(string userName, string email, string personalId, Address address,  bool married , bool hasJob, decimal? monthlySalary)
+        public User(string userName, string email, string personalId, string phoneNumber, Address address,  bool? married , bool? hasJob, decimal? monthlySalary)
         {
             Guard.Against.NullOrEmpty(personalId, nameof(personalId));
             Guard.Against.NullOrEmpty(userName, nameof(userName));
-            if (hasJob)
+            if (hasJob.HasValue && hasJob.Value)
             {
                 Guard.Against.Null(monthlySalary, nameof(monthlySalary));
                 Guard.Against.NegativeOrZero(monthlySalary.Value, nameof(monthlySalary));
@@ -38,6 +38,7 @@ namespace UsersApi.Domain.Entities.UserAggregate
             UserName = userName;
             Email = email;
             Address = address;
+            PhoneNumber = phoneNumber;
 
         }
     }
