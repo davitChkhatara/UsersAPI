@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UsersApi.Infrastructure;
 
-namespace UsersApi.Migrations
+namespace UsersApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -199,7 +199,7 @@ namespace UsersApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasJob")
+                    b.Property<bool?>("HasJob")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -208,7 +208,7 @@ namespace UsersApi.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("Married")
+                    b.Property<bool?>("Married")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("MonthlySalary")

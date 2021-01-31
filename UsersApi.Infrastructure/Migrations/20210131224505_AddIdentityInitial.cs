@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace UsersApi.Migrations
+namespace UsersApi.Infrastructure.Migrations
 {
-    public partial class IdentityInitial : Migration
+    public partial class AddIdentityInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,8 +42,8 @@ namespace UsersApi.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PersonalId = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
-                    Married = table.Column<bool>(type: "bit", nullable: false),
-                    HasJob = table.Column<bool>(type: "bit", nullable: false),
+                    Married = table.Column<bool>(type: "bit", nullable: true),
+                    HasJob = table.Column<bool>(type: "bit", nullable: true),
                     MonthlySalary = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

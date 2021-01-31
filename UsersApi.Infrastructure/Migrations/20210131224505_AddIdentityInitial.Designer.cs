@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UsersApi.Infrastructure;
 
-namespace UsersApi.Migrations
+namespace UsersApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210131174914_IdentityInitial")]
-    partial class IdentityInitial
+    [Migration("20210131224505_AddIdentityInitial")]
+    partial class AddIdentityInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -201,7 +201,7 @@ namespace UsersApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasJob")
+                    b.Property<bool?>("HasJob")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -210,7 +210,7 @@ namespace UsersApi.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("Married")
+                    b.Property<bool?>("Married")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("MonthlySalary")

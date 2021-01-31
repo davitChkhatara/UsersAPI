@@ -36,7 +36,7 @@ namespace UsersApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("UserDbConnetion"), b => b.MigrationsAssembly("UsersApi")));
+                    options.UseSqlServer(Configuration.GetConnectionString("UserDbConnetion"), b => b.MigrationsAssembly("UsersApi.Infrastructure")));
             services.AddIdentity<User,IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<IUserService, UserService>();
