@@ -9,5 +9,12 @@ namespace UsersApi.Models
     {
         public string Code { get; set; }
         public string Message { get; set; }
+        public List<Error> Errors { get; set; }
+        
+    }
+
+    public class Error
+    {
+        public string Description { get; set; }
     }
 }

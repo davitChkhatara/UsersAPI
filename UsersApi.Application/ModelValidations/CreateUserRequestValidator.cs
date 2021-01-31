@@ -7,9 +7,9 @@ using UsersApi.Application.Users.Models;
 
 namespace UsersApi.Application.ModelValidations
 {
-    public class CreateUserRequestValidatior : AbstractValidator<CreateUserRequest>
+    public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
     {
-        public CreateUserRequestValidatior()
+        public CreateUserRequestValidator()
         {
             RuleFor(x => x.Email).NotNull().NotEmpty();
             RuleFor(x => x.UserName).NotNull().NotEmpty();
