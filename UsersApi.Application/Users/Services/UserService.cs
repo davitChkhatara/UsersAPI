@@ -14,11 +14,12 @@ namespace UsersApi.Application.Users.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly IUserRepository _userRepository;
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IUserRepository userRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _userRepository = userRepository;
         }
 
         public async Task CreateUser(CreateUserRequest request)
@@ -42,9 +43,10 @@ namespace UsersApi.Application.Users.Services
                                                                 request.MonthlySalary),
                                                                 request.Password);
 
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
-               
+                var userSigned = await _userManager.FindByNameAsync(request.UserName);
+                await _signInManager.SignInAsync(userSigned,false);
             }
         }
 
@@ -76,17 +78,23 @@ namespace UsersApi.Application.Users.Services
             }
         }
 
-        public async Task UpdateUser(string userName)
+        public async Task UpdateUser(UpdateUserRequest request)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userRepository.GetUserByUserName(request.UserName);
             if (user == null)
             {
-                throw new UserNotFoundException(userName);
+                throw new UserNotFoundException(request.UserName);
+            }
+
+            user.UpdateUserInfo(request.Married, request.HasJob, request.MonthlySalary, request.PhoneNumber);
+            if(request.Address != null)
+            {
+                user.UpdateUserAddress(request.Address.City, request.Address.Street, request.Address.Country);
             }
             var res = await _userManager.UpdateAsync(user);
             if (!res.Succeeded)
             {
-                throw new UserUnableToSignException(userName);
+                //throw new UserUnableToSignException(userName);
             }
         }
     }

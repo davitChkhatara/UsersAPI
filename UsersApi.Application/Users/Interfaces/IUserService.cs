@@ -11,5 +11,6 @@ namespace UsersApi.Application.Users.Interfaces
         Task CreateUser(CreateUserRequest request);
         Task SignIn(SignInUserRequest request);
         Task DeleteUser(string userName);
+        Task UpdateUser(UpdateUserRequest request);
     }
 }

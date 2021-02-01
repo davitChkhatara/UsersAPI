@@ -24,5 +24,12 @@ namespace UsersApi.Domain.Entities.UserAggregate
             City = city;
             Country = country;
         }
+
+        public void UpdateAddress(string city, string street, string country)
+        {
+            City = string.IsNullOrEmpty(city) ? City : city;
+            Country = string.IsNullOrEmpty(country) ? Country : country;
+            Street = string.IsNullOrEmpty(street) ? Street : street;
+        }
     }
 }

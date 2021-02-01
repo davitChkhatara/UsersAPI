@@ -20,6 +20,7 @@ using UsersApi.Application.Users.Services;
 using UsersApi.Domain.Entities.UserAggregate;
 using UsersApi.ExceptionHandlingMiddleware;
 using UsersApi.Infrastructure;
+using UsersApi.Infrastructure.Repositories;
 
 namespace UsersApi
 {
@@ -40,6 +41,7 @@ namespace UsersApi
             services.AddIdentity<User,IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddControllers()
             .AddFluentValidation(fv =>

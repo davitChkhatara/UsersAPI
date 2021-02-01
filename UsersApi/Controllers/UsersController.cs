@@ -59,5 +59,17 @@ namespace UsersApi.Controllers
             return NoContent();
         }
 
+        [HttpPut]
+        [Route("user")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateUser(UpdateUserRequest request)
+        {
+            await _userService.UpdateUser(request);
+            return NoContent();
+        }
+
+
     }
 }

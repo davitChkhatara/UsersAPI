@@ -39,7 +39,26 @@ namespace UsersApi.Domain.Entities.UserAggregate
             Email = email;
             Address = address;
             PhoneNumber = phoneNumber;
+        }
 
+        public void UpdateUserInfo(bool? married, bool? hasJob, decimal? monthlySalary, string phoneNumber)
+        {
+            Married = married.HasValue ? married.Value : Married;
+            HasJob = hasJob.HasValue ? hasJob.Value : HasJob;
+            MonthlySalary = (monthlySalary.HasValue && hasJob.HasValue && hasJob.Value) ? monthlySalary.Value : MonthlySalary;
+            PhoneNumber = string.IsNullOrEmpty(phoneNumber) ? PhoneNumber : phoneNumber;
+        }
+
+        public void UpdateUserAddress(string city, string street, string country)
+        {
+            if(Address != null)
+            {
+                Address.UpdateAddress(city, street, country);
+            }
+            else
+            {
+                Address = new Address(street, city, street);
+            }
         }
     }
 }
