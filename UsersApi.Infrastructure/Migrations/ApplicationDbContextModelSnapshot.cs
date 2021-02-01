@@ -248,7 +248,9 @@ namespace UsersApi.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique()
+                        .HasFilter("[AddressId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -315,8 +317,9 @@ namespace UsersApi.Infrastructure.Migrations
             modelBuilder.Entity("UsersApi.Domain.Entities.UserAggregate.User", b =>
                 {
                     b.HasOne("UsersApi.Domain.Entities.UserAggregate.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
+                        .WithOne()
+                        .HasForeignKey("UsersApi.Domain.Entities.UserAggregate.User", "AddressId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Address");
                 });

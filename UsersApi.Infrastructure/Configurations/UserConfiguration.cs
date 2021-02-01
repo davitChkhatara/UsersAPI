@@ -18,6 +18,7 @@ namespace UsersApi.Infrastructure.Configurations
             builder.Property(c => c.HasJob);
             builder.Property(c => c.MonthlySalary).HasPrecision(18,2);
             builder.Property(c => c.Married);
+            builder.HasOne(c => c.Address).WithOne().OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

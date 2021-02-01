@@ -27,13 +27,12 @@ namespace UsersApi.Controllers
 
         [HttpPost]
         [Route("user")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(CreateUserResponse),(int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> CreateUser([FromBody]CreateUserRequest request)
         {
-            await _userService.CreateUser(request);
-            return NoContent();
+            return Ok(await _userService.CreateUser(request));
         }
 
         [HttpDelete]
@@ -58,7 +57,7 @@ namespace UsersApi.Controllers
             return NoContent();
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("user")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]

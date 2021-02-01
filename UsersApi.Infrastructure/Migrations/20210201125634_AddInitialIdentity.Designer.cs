@@ -10,8 +10,8 @@ using UsersApi.Infrastructure;
 namespace UsersApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210131224505_AddIdentityInitial")]
-    partial class AddIdentityInitial
+    [Migration("20210201125634_AddInitialIdentity")]
+    partial class AddInitialIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -250,7 +250,9 @@ namespace UsersApi.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique()
+                        .HasFilter("[AddressId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -317,8 +319,9 @@ namespace UsersApi.Infrastructure.Migrations
             modelBuilder.Entity("UsersApi.Domain.Entities.UserAggregate.User", b =>
                 {
                     b.HasOne("UsersApi.Domain.Entities.UserAggregate.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
+                        .WithOne()
+                        .HasForeignKey("UsersApi.Domain.Entities.UserAggregate.User", "AddressId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Address");
                 });

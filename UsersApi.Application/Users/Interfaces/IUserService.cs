@@ -9,7 +9,7 @@ namespace UsersApi.Application.Users.Interfaces
 {
     public interface IUserService
     {
-        Task CreateUser(CreateUserRequest request);
+        Task<CreateUserResponse> CreateUser(CreateUserRequest request);
         Task SignIn(SignInUserRequest request);
         Task DeleteUser(string userName);
         Task UpdateUser(UpdateUserRequest request);
