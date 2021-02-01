@@ -18,24 +18,6 @@ namespace UsersApi.Infrastructure.Configurations
             builder.Property(c => c.HasJob);
             builder.Property(c => c.MonthlySalary).HasPrecision(18,2);
             builder.Property(c => c.Married);
-            
-
-            //builder.OwnsOne(o => o.Address, a =>
-            //{
-            //    a.WithOwner();
-
-            //    a.Property(a => a.City)
-            //        .HasMaxLength(100)
-            //        .IsRequired();
-
-            //    a.Property(a => a.Street)
-            //        .HasMaxLength(180)
-            //        .IsRequired();
-
-            //    a.Property(a => a.Country)
-            //        .HasMaxLength(100)
-            //        .IsRequired();
-            //});
         }
     }
 }

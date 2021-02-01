@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UsersApi.Application;
+using UsersApi.Domain.Enums;
 
 namespace UsersApi.ExceptionHandlingMiddleware
 {
@@ -16,14 +17,14 @@ namespace UsersApi.ExceptionHandlingMiddleware
                                         .Select(x => x.ErrorMessage));
             var response = new ErrorResponse 
             { 
-                Code = "Validation Failure",
+                Code = ErrorResponseCodesEnum.VALIDATION_ERROR.Value,
                 Message = messages ,
                 Errors = new List<Error>
                 {
                     new Error
                     {
-                        Code = "Validation Failure",
-                        Description = "Validation Failure"
+                        Code = ErrorResponseCodesEnum.VALIDATION_ERROR.Value,
+                        Description = messages
                     }
                 }
             };

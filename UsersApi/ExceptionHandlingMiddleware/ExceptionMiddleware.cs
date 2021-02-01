@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using UsersApi.Application;
 using UsersApi.Application.Exceptions;
+using UsersApi.Domain.Enums;
 
 namespace UsersApi.ExceptionHandlingMiddleware
 {
@@ -54,7 +55,7 @@ namespace UsersApi.ExceptionHandlingMiddleware
 
                     return context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
                     {
-                        Code = HttpStatusCode.Conflict.ToString(),
+                        Code = ErrorResponseCodesEnum.ERROR.Value,
                         Message = ex.Message,
                         Errors = GetErrors(ex, HttpStatusCode.Conflict)
                     }, options));
@@ -63,7 +64,7 @@ namespace UsersApi.ExceptionHandlingMiddleware
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     return context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
                     {
-                        Code = HttpStatusCode.InternalServerError.ToString(),
+                        Code = ErrorResponseCodesEnum.UNKNOWN_ERROR.Value,
                         Message = ex.Message,
                         Errors = GetErrors(ex, HttpStatusCode.InternalServerError)
                     }, options));

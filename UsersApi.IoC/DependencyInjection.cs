@@ -14,7 +14,7 @@ namespace UsersApi.IoC
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContextPool<ApplicationDbContext>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("UserDbConnetion"), b => b.MigrationsAssembly("UsersApi")));
+                    options.UseSqlServer(configuration.GetConnectionString("UserDbConnetion"), b => b.MigrationsAssembly("UsersApi.Infrastructure")));
             //services.AddIdentity<User, IdentityRole>()
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
