@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UsersApi.Models
+namespace UsersApi.Application
 {
     public class ErrorResponse
     {
@@ -15,6 +15,7 @@ namespace UsersApi.Models
 
     public class Error
     {
+        public string Code { get; set; }
         public string Description { get; set; }
     }
 }

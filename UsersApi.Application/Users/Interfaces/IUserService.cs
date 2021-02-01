@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UsersApi.Application.Users.Models;
+using UsersApi.Domain.Entities.UserAggregate;
 
 namespace UsersApi.Application.Users.Interfaces
 {
@@ -12,5 +13,6 @@ namespace UsersApi.Application.Users.Interfaces
         Task SignIn(SignInUserRequest request);
         Task DeleteUser(string userName);
         Task UpdateUser(UpdateUserRequest request);
+        Task<User> GetUser(string userName);
     }
 }

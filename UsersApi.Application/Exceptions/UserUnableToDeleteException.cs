@@ -6,9 +6,9 @@ namespace UsersApi.Application.Exceptions
 {
     public class UserUnableToDeleteException : Exception
     {
-        public UserUnableToDeleteException(string userName) : base($"User can not be deleted. UserName : {userName}")
+        public UserUnableToDeleteException(string userName, List<Error> errors) : base($"User can not be deleted. UserName : {userName}")
         {
-
+            Data["Errors"] = errors;
         }
     }
 }

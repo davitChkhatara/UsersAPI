@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UsersApi.Models;
+using UsersApi.Application;
 
 namespace UsersApi.ExceptionHandlingMiddleware
 {
@@ -17,7 +17,15 @@ namespace UsersApi.ExceptionHandlingMiddleware
             var response = new ErrorResponse 
             { 
                 Code = "Validation Failure",
-                Message = messages 
+                Message = messages ,
+                Errors = new List<Error>
+                {
+                    new Error
+                    {
+                        Code = "Validation Failure",
+                        Description = "Validation Failure"
+                    }
+                }
             };
 
             return new BadRequestObjectResult(response);

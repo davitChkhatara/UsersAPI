@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using UsersApi.Application.Users.Commands.CreateUser;
+using UsersApi.Application;
 using UsersApi.Application.Users.Interfaces;
 using UsersApi.Application.Users.Models;
-using UsersApi.Models;
+using UsersApi.Domain.Entities.UserAggregate;
 
 namespace UsersApi.Controllers
 {
@@ -68,6 +67,17 @@ namespace UsersApi.Controllers
         {
             await _userService.UpdateUser(request);
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("user/{user-name}")]
+        [ProducesResponseType(typeof(User),(int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateUser()
+        {
+            var userName = RouteData.Values["user-name"].ToString();
+            return Ok(await _userService.GetUser(userName));
         }
 
 

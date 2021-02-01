@@ -24,7 +24,7 @@ namespace UsersApi.Infrastructure.Repositories
         {
             var user = await _userManager.Users
                             .Include(x => x.Address)
-                            .SingleAsync(x => x.UserName.Equals(userName));
+                            .FirstOrDefaultAsync(x => x.UserName.Equals(userName));
 
             return user;
         }

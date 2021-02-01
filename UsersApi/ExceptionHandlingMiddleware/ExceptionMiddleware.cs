@@ -7,7 +7,8 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using UsersApi.Models;
+using UsersApi.Application;
+using UsersApi.Application.Exceptions;
 
 namespace UsersApi.ExceptionHandlingMiddleware
 {
@@ -37,39 +38,54 @@ namespace UsersApi.ExceptionHandlingMiddleware
 
         private static Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
             switch (ex)
             {
-                //case ValidationException e:
-                //    context.Response.ContentType = "application/json"; ;
-                //    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                //    var response = new ErrorResponse
-                //    {
-                //        Error = new Error { Errors = new List<string>() }
-                //    };
-                //    response.Error.Code = (int)HttpStatusCode.BadRequest;
-                //    response.Error.Message = "validation failure";
-                //    foreach (var error in e.Errors)
-                //    {
-                //        response.Error.Errors.Add(error.ErrorMessage);
-                //    }
-                //    return context.Response.WriteAsync(JsonSerializer.Serialize(response, SerilizerOptions.SnakeNameSerializerOptions()));
-
-
-                default:
+                case UserUnableToCreateException _:
+                case UserNotFoundException _:
+                case UserUnableToDeleteException _:
+                case UserUnableToSignException _:
+                case UserAlreadyExistsException _:
                     context.Response.ContentType = "application/json"; ;
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.StatusCode = (int)HttpStatusCode.Conflict;
 
                     return context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
                     {
+                        Code = HttpStatusCode.Conflict.ToString(),
+                        Message = ex.Message,
+                        Errors = GetErrors(ex, HttpStatusCode.Conflict)
+                    }, options));
+                default:
+                    context.Response.ContentType = "application/json"; ;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    return context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
+                    {
                         Code = HttpStatusCode.InternalServerError.ToString(),
-                        Message = ex.Message
-                    }));
+                        Message = ex.Message,
+                        Errors = GetErrors(ex, HttpStatusCode.InternalServerError)
+                    }, options));
 
             }
         }
 
-
-
-
+        private static List<Error> GetErrors(Exception ex,HttpStatusCode statusCode)
+        {
+            if(ex.Data is object && ex.Data["Errors"] is object)
+            {
+                return (List<Error>)ex.Data["Errors"];
+            }
+            return new List<Error>
+            {
+                new Error
+                {
+                    Code = statusCode.ToString(),
+                    Description = ex.Message
+                }
+            };
         }
+
     }
+}

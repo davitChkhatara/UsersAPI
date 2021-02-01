@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UsersApi.Application.Exceptions;
+using UsersApi.Application.Extensions;
 using UsersApi.Application.Users.Interfaces;
 using UsersApi.Application.Users.Models;
 using UsersApi.Domain.Entities.UserAggregate;
@@ -36,18 +38,19 @@ namespace UsersApi.Application.Users.Services
                                                                 request.PhoneNumber,
                                                                 request.Address == null ? null : 
                                                                 new Address(request.Address.Street,
-                                                                             request.Address.City,
+                                                                            request.Address.City,
                                                                             request.Address.Country),
                                                                 request.Married,
                                                                 request.HasJob,
                                                                 request.MonthlySalary),
                                                                 request.Password);
-
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var userSigned = await _userManager.FindByNameAsync(request.UserName);
-                await _signInManager.SignInAsync(userSigned,false);
+                throw new UserUnableToCreateException(request.UserName, result.Errors.GetErrorList());
             }
+            var userSigned = await _userManager.FindByNameAsync(request.UserName);
+            await _signInManager.SignInAsync(userSigned,false);
+            
         }
 
         public async Task SignIn(SignInUserRequest request)
@@ -74,7 +77,7 @@ namespace UsersApi.Application.Users.Services
             var res = await _userManager.DeleteAsync(user);
             if (!res.Succeeded)
             {
-                throw new UserUnableToSignException(userName);
+                throw new UserUnableToDeleteException(userName, res.Errors.GetErrorList());
             }
         }
 
@@ -94,8 +97,19 @@ namespace UsersApi.Application.Users.Services
             var res = await _userManager.UpdateAsync(user);
             if (!res.Succeeded)
             {
-                //throw new UserUnableToSignException(userName);
+                throw new UserUnableToUpdateException(request.UserName, res.Errors.GetErrorList());
             }
+        }
+
+        public async Task<User> GetUser(string userName)
+        {
+            var user = await _userRepository.GetUserByUserName(userName);
+            if (user == null)
+            {
+                throw new UserNotFoundException(userName);
+            }
+
+            return user;
         }
     }
 }
