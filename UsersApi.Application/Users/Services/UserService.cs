@@ -24,7 +24,7 @@ namespace UsersApi.Application.Users.Services
             _userRepository = userRepository;
         }
 
-        public async Task CreateUser(CreateUserRequest request)
+        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user != null)
@@ -50,7 +50,10 @@ namespace UsersApi.Application.Users.Services
             }
             var userSigned = await _userManager.FindByNameAsync(request.UserName);
             await _signInManager.SignInAsync(userSigned,false);
-            
+            return new CreateUserResponse
+            {
+                UserId = userSigned.Id
+            };
         }
 
         public async Task SignIn(SignInUserRequest request)
@@ -69,7 +72,7 @@ namespace UsersApi.Application.Users.Services
 
         public async Task DeleteUser(string userName)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userRepository.GetUserByUserName(userName);
             if (user == null)
             {
                 throw new UserNotFoundException(userName);
@@ -79,6 +82,7 @@ namespace UsersApi.Application.Users.Services
             {
                 throw new UserUnableToDeleteException(userName, res.Errors.GetErrorList());
             }
+            await _userRepository.DeleteAddress(user.Address);
         }
 
         public async Task UpdateUser(UpdateUserRequest request)

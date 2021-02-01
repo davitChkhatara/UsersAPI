@@ -14,7 +14,7 @@ namespace UsersApi.Infrastructure
 
         }
 
-
+        public DbSet<Address> Address { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -29,5 +29,19 @@ namespace UsersApi.Infrastructure.Repositories
             return user;
         }
 
+        public async Task DeleteAddress(Address address)
+        {
+             _applicationDbContext.Address.Remove(address);
+            await _applicationDbContext.SaveChangesAsync();
+        }
+
+        public async Task<User> GetUserById(string userId)
+        {
+            var user = await _userManager.Users
+                           .Include(x => x.Address)
+                           .FirstOrDefaultAsync(x => x.Id.Equals(userId));
+
+            return user;
+        }
     }
 }

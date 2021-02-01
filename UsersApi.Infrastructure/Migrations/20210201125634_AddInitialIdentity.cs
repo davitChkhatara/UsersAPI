@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace UsersApi.Infrastructure.Migrations
 {
-    public partial class AddIdentityInitial : Migration
+    public partial class AddInitialIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -69,7 +69,7 @@ namespace UsersApi.Infrastructure.Migrations
                         column: x => x.AddressId,
                         principalTable: "Address",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,7 +213,9 @@ namespace UsersApi.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AddressId",
                 table: "Users",
-                column: "AddressId");
+                column: "AddressId",
+                unique: true,
+                filter: "[AddressId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
