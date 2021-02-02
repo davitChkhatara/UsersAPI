@@ -10,7 +10,7 @@ namespace UsersApi.Application.ModelValidations
     {
         public UpdateUserRequestValidator()
         {
-            RuleFor(x => x.UserName).NotNull().NotEmpty();
+            RuleFor(x => x.UserId).NotNull().NotEmpty();
             When(c => c.Address != null, () =>
             {
                 RuleFor(x => x.Address.City).NotNull().NotEmpty();

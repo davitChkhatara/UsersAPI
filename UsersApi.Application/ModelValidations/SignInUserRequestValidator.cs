@@ -10,7 +10,7 @@ namespace UsersApi.Application.ModelValidations
     {
         public SignInUserRequestValidator()
         {
-            RuleFor(x => x.UserName).NotNull().NotEmpty();
+            RuleFor(x => x.UserId).NotNull().NotEmpty();
             RuleFor(x => x.Password).NotNull().NotEmpty();
         }
     }

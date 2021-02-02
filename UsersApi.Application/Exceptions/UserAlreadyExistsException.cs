@@ -6,7 +6,7 @@ namespace UsersApi.Application.Exceptions
 {
     public class UserAlreadyExistsException : Exception
     {
-        public UserAlreadyExistsException(string userName) : base($"User already exists. UserName : {userName}")
+        public UserAlreadyExistsException(string userName) : base($"UserName ,Email or PersonalId already exists. UserName : {userName}.")
         {
 
         }

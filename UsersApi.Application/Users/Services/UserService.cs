@@ -26,8 +26,8 @@ namespace UsersApi.Application.Users.Services
 
         public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
-            if (user != null)
+            var validateUser = await _userRepository.ValidateUserCreate(request);
+            if (!validateUser)
             {
                 throw new UserAlreadyExistsException(request.UserName);
             }
@@ -48,8 +48,8 @@ namespace UsersApi.Application.Users.Services
             {
                 throw new UserUnableToCreateException(request.UserName, result.Errors.GetErrorList());
             }
+
             var userSigned = await _userManager.FindByNameAsync(request.UserName);
-            await _signInManager.SignInAsync(userSigned,false);
             return new CreateUserResponse
             {
                 UserId = userSigned.Id
@@ -58,39 +58,39 @@ namespace UsersApi.Application.Users.Services
 
         public async Task SignIn(SignInUserRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _userManager.FindByIdAsync(request.UserId);
             if(user == null)
             {
-                throw new UserNotFoundException(request.UserName);
+                throw new UserNotFoundException(request.UserId);
             }
             var res = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
             if (!res.Succeeded)
             {
-                throw new UserUnableToSignException(request.UserName);
+                throw new UserUnableToSignException(user.UserName);
             }
         }
 
-        public async Task DeleteUser(string userName)
+        public async Task DeleteUser(string userId)
         {
-            var user = await _userRepository.GetUserByUserName(userName);
+            var user = await _userRepository.GetUserById(userId);
             if (user == null)
             {
-                throw new UserNotFoundException(userName);
+                throw new UserNotFoundException(userId);
             }
             var res = await _userManager.DeleteAsync(user);
             if (!res.Succeeded)
             {
-                throw new UserUnableToDeleteException(userName, res.Errors.GetErrorList());
+                throw new UserUnableToDeleteException(user.UserName, res.Errors.GetErrorList());
             }
             await _userRepository.DeleteAddress(user.Address);
         }
 
         public async Task UpdateUser(UpdateUserRequest request)
         {
-            var user = await _userRepository.GetUserByUserName(request.UserName);
+            var user = await _userRepository.GetUserById(request.UserId);
             if (user == null)
             {
-                throw new UserNotFoundException(request.UserName);
+                throw new UserNotFoundException(request.UserId);
             }
 
             user.UpdateUserInfo(request.Married, request.HasJob, request.MonthlySalary, request.PhoneNumber);
@@ -101,7 +101,7 @@ namespace UsersApi.Application.Users.Services
             var res = await _userManager.UpdateAsync(user);
             if (!res.Succeeded)
             {
-                throw new UserUnableToUpdateException(request.UserName, res.Errors.GetErrorList());
+                throw new UserUnableToUpdateException(user.UserName, res.Errors.GetErrorList());
             }
         }
 

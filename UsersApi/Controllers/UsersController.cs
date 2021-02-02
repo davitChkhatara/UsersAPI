@@ -36,13 +36,14 @@ namespace UsersApi.Controllers
         }
 
         [HttpDelete]
-        [Route("user")]
+        [Route("user/{user-id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Conflict)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteUser(string userName)
+        public async Task<IActionResult> DeleteUser()
         {
-            await _userService.DeleteUser(userName);
+            var userId = RouteData.Values["user-id"].ToString();
+            await _userService.DeleteUser(userId);
             return NoContent();
         }
 

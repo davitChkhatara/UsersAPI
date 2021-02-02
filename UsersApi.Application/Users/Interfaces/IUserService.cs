@@ -11,7 +11,7 @@ namespace UsersApi.Application.Users.Interfaces
     {
         Task<CreateUserResponse> CreateUser(CreateUserRequest request);
         Task SignIn(SignInUserRequest request);
-        Task DeleteUser(string userName);
+        Task DeleteUser(string userId);
         Task UpdateUser(UpdateUserRequest request);
         Task<User> GetUser(string userName);
     }
